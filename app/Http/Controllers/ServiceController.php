@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Profil;
+use App\Models\Service;
 use Illuminate\Http\Request;
 
-class ProfilController extends Controller
+class ServiceController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,7 +34,7 @@ class ProfilController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Profil $profil)
+    public function show(Service $service)
     {
         //
     }
@@ -42,7 +42,7 @@ class ProfilController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Profil $profil)
+    public function edit(Service $service)
     {
         //
     }
@@ -50,7 +50,7 @@ class ProfilController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Profil $profil)
+    public function update(Request $request, Service $service)
     {
         //
     }
@@ -58,7 +58,7 @@ class ProfilController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Profil $profil)
+    public function destroy(Service $service)
     {
         //
     }

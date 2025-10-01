@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Profil;
+use App\Models\JourFerie;
 use Illuminate\Http\Request;
 
-class ProfilController extends Controller
+class JourFerieController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,7 +34,7 @@ class ProfilController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Profil $profil)
+    public function show(JourFerie $jourFerie)
     {
         //
     }
@@ -42,7 +42,7 @@ class ProfilController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Profil $profil)
+    public function edit(JourFerie $jourFerie)
     {
         //
     }
@@ -50,7 +50,7 @@ class ProfilController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Profil $profil)
+    public function update(Request $request, JourFerie $jourFerie)
     {
         //
     }
@@ -58,7 +58,7 @@ class ProfilController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Profil $profil)
+    public function destroy(JourFerie $jourFerie)
     {
         //
     }
