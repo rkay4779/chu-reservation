@@ -19,7 +19,13 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'nom',
+        'prenom',
         'password',
+        'telephone',
+        'specialite_id',
+        'service_id',
+        'profil_id',
     ];
 
     /**
@@ -45,5 +51,19 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    public function specialite()
+    {
+        return $this->belongsTo(Specialite::class, 'specialite_id', 'id');
+    }
+
+    public function service()
+    {
+        return $this->belongsTo(Service::class, 'service_id', 'id');
+    }
+
+    public function profil()
+    {
+        return $this->belongsTo(Profil::class, 'profil_id', 'id');
     }
 }

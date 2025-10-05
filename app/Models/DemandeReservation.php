@@ -31,7 +31,7 @@ class DemandeReservation extends Model
      */
     public function utilisateur()
     {
-        return $this->belongsTo(Utilisateur::class, 'utilisateur_id', 'id');
+        return $this->belongsTo(Utilisateur::class, 'user_id', 'id');
     }
 
     /**

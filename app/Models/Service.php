@@ -19,9 +19,9 @@ class Service extends Model
     /**
      * Relation: un service peut avoir plusieurs utilisateurs.
      */
-    public function utilisateurs()
+    public function users()
     {
-        return $this->hasMany(Utilisateur::class, 'service_id', 'id');
+        return $this->hasMany(User::class, 'service_id', 'id');
     }
 
     /**

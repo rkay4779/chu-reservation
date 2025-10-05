@@ -19,8 +19,8 @@ class Specialite extends Model
     /**
      * Relation: une spécialité peut avoir plusieurs utilisateurs (si besoin).
      */
-    public function utilisateurs()
+    public function users()
     {
-        return $this->hasMany(Utilisateur::class, 'specialite_id', 'id');
+        return $this->hasMany(User::class, 'specialite_id', 'id');
     }
 }

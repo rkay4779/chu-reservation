@@ -19,8 +19,8 @@ class Profil extends Model
     /**
      * Relation: un profil a plusieurs utilisateurs.
      */
-    public function utilisateurs()
+    public function users()
     {
-        return $this->hasMany(Utilisateur::class, 'profil_id', 'id');
+        return $this->hasMany(User::class, 'profil_id', 'id');
     }
 }

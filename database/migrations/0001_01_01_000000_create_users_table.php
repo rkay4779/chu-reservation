@@ -11,6 +11,25 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Schema::create('users', function (Blueprint $table) {
+        //     $table->id();
+        //     // merged fields from utilisateurs
+        //     $table->string('nom');
+        //     $table->string('prenom');
+        //     $table->string('name')->nullable(); // keep Laravel default if needed
+        //     $table->string('email')->unique();
+        //     $table->timestamp('email_verified_at')->nullable();
+        //     $table->string('password');
+        //     $table->string('telephone')->nullable();
+            
+        //     // foreign keys
+        //     $table->foreignId('specialite_id')->constrained('specialites')->onDelete('cascade');
+        //     $table->foreignId('service_id')->constrained('services')->onDelete('cascade');
+        //     $table->foreignId('profil_id')->constrained('profils')->onDelete('cascade');
+
+        //     $table->rememberToken();
+        //     $table->timestamps();
+        // });
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
