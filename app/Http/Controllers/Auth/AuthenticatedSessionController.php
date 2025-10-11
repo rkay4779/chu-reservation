@@ -28,25 +28,67 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
+    // public function store(LoginRequest $request): RedirectResponse
+    // {
+    //     $user = $request->validateCredentials();
+
+    //     if (Features::enabled(Features::twoFactorAuthentication()) && $user->hasEnabledTwoFactorAuthentication()) {
+    //         $request->session()->put([
+    //             'login.id' => $user->getKey(),
+    //             'login.remember' => $request->boolean('remember'),
+    //         ]);
+
+    //         return to_route('two-factor.login');
+    //     }
+
+    //     Auth::login($user, $request->boolean('remember'));
+
+    //     $request->session()->regenerate();
+
+    //     return redirect()->intended(route('dashboard', absolute: false));
+    // }
+    //fixed store
     public function store(LoginRequest $request): RedirectResponse
     {
-        $user = $request->validateCredentials();
+    $user = $request->validateCredentials();
 
-        if (Features::enabled(Features::twoFactorAuthentication()) && $user->hasEnabledTwoFactorAuthentication()) {
-            $request->session()->put([
-                'login.id' => $user->getKey(),
-                'login.remember' => $request->boolean('remember'),
-            ]);
+    if (Features::enabled(Features::twoFactorAuthentication()) && $user->hasEnabledTwoFactorAuthentication()) {
+        $request->session()->put([
+            'login.id' => $user->getKey(),
+            'login.remember' => $request->boolean('remember'),
+        ]);
 
-            return to_route('two-factor.login');
+        return to_route('two-factor.login');
+    }
+
+    Auth::login($user, $request->boolean('remember'));
+
+    $request->session()->regenerate();
+
+    // Redirect based on profil (uses helper on User model)
+    $authenticatedUser = Auth::user();
+
+    if ($authenticatedUser) {
+        // Admin -> top-level dashboard.tsx
+        if ($authenticatedUser->isProfil('Admin')) {
+            return redirect()->route('dashboard'); // points to resources/js/pages/dashboard.tsx
         }
 
-        Auth::login($user, $request->boolean('remember'));
+        // Secrétaire -> resources/js/pages/secretaire/dashboard.tsx
+        if ($authenticatedUser->isProfil('Secrétaire') || $authenticatedUser->isProfil('Secretaire')) {
+            return redirect()->route('secretaire.dashboard');
+        }
 
-        $request->session()->regenerate();
-
-        return redirect()->intended(route('dashboard', absolute: false));
+        // Utilisateur -> resources/js/pages/utilisateur/dashboard.tsx
+        if ($authenticatedUser->isProfil('Utilisateur')) {
+            return redirect()->route('utilisateur.dashboard');
+        }
     }
+
+    // Fallback: default dashboard route
+    return redirect()->route('dashboard');
+    }
+
 
     /**
      * Destroy an authenticated session.
