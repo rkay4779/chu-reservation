@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\SecretaireSalle;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
+use App\Models\User;
+use App\Models\Salle;
+use App\Models\SecretaireSalle;
 
 class SecretaireSalleController extends Controller
 {
@@ -12,7 +15,18 @@ class SecretaireSalleController extends Controller
      */
     public function index()
     {
-        //
+        dd('Index method hit');
+        $secretaires = User::whereHas('profil', function ($query) {
+            $query->where('nom', 'secretaire');
+        })->select('id', 'name')->get();
+
+        $salles = Salle::select('id', 'nom')->get();
+
+        return Inertia::render('admin/salles/affecter-secretaire', [
+            'secretaires' => $secretaires,
+            'salles' => $salles,
+            'success' => session('success'),
+        ]);
     }
 
     /**
@@ -28,7 +42,17 @@ class SecretaireSalleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'secretaire_id' => 'required|exists:users,id',
+            'salle_id' => 'required|exists:salles,id',
+        ]);
+
+        // Avoid duplicates
+        SecretaireSalle::firstOrCreate($validated);
+
+        return redirect()
+            ->route('admin.salles.affectation.index')
+            ->with('success', 'Salle affectée au secrétaire avec succès.');
     }
 
     /**
@@ -62,4 +86,5 @@ class SecretaireSalleController extends Controller
     {
         //
     }
+    
 }

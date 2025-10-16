@@ -78,11 +78,9 @@
 //     );
 // }
 // resources/js/components/app-sidebar.tsx
-// resources/js/components/app-sidebar.tsx
 import { useEffect, useRef, useState } from 'react';
-import { usePage } from '@inertiajs/react';
-import { Link } from '@inertiajs/react';
-import { LayoutGrid, Folder, BookOpen, Users, Home, Calendar } from 'lucide-react';
+import { usePage, Link } from '@inertiajs/react';
+import { LayoutGrid, Folder, BookOpen, Users, Home, Calendar, FolderCheck, CalendarIcon } from 'lucide-react';
 import AppLogo from './app-logo';
 import ThemeToggle from '@/components/ThemeToggle';
 import { NavUser } from '@/components/nav-user';
@@ -96,14 +94,12 @@ import {
   SidebarMenuButton,
 } from '@/components/ui/sidebar';
 
-// small local type
 type LocalNavItem = {
   title: string;
   href: string;
   icon: React.ComponentType<any>;
 };
 
-// normalize role: remove accents, lowercase, trim
 function normalizeRole(raw?: string): string {
   if (!raw) return '';
   return raw
@@ -113,7 +109,6 @@ function normalizeRole(raw?: string): string {
     .trim();
 }
 
-// read cookie helper
 function readCookie(name: string): string | null {
   const m = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
   return m ? decodeURIComponent(m[2]) : null;
@@ -128,9 +123,12 @@ export function AppSidebar() {
     admin: [
       { title: 'Dashboard', href: '/dashboard', icon: LayoutGrid },
       { title: 'Ajouter Utilisateur', href: '/admin/users/create', icon: Users },
-      { title: 'Hopitaux', href: '/admin/hopitaux', icon: Home },
-      { title: 'Salles', href: '/admin/salles', icon: Folder },
-    ],
+      { title: 'Liste Utilisateurs', href: '/admin/users', icon: Users },
+      { title: 'Ajouter Hôpital', href: '/admin/hopitaux/create', icon: Home },
+      { title: 'Ajouter salle', href: '/admin/salles/create', icon: Folder },
+      { title: 'Affectation Salle - Secrétaire', href: '/admin/salles/affecter-secretaire', icon: FolderCheck },
+      { title: 'Gestion Jours Fériés' , icon: CalendarIcon , href: '/admin/joursferies/gestion'},
+    ],  
     secretaire: [
       { title: 'Dashboard', href: '/secretaire/dashboard', icon: LayoutGrid },
       { title: 'Demandes', href: '/secretaire/demandes', icon: Calendar },
@@ -141,34 +139,27 @@ export function AppSidebar() {
       { title: 'Nouvelle demande', href: '/demandes/create', icon: Folder },
       { title: 'Historique', href: '/demandes/historique', icon: BookOpen },
     ],
-    default: [
-      { title: 'Dashboard', href: '/dashboard', icon: LayoutGrid },
-    ],
+    default: [{ title: 'Dashboard', href: '/dashboard', icon: LayoutGrid }],
   };
 
   const items = menus[userRole] ?? menus.default;
 
-  // whether sidebar is expanded: local state driven by cookie/localStorage/document class
   const [expanded, setExpanded] = useState<boolean>(() => {
     if (typeof document !== 'undefined') {
       const cookie = readCookie('sidebar_state');
       if (cookie === 'true') return true;
-      // fallback to localStorage key many apps use
       try {
         const ls = localStorage.getItem('sidebar_state');
         if (ls === 'true') return true;
-      } catch (e) { /* ignore */ }
-      // fallback to existing document class
+      } catch (e) {}
       return document.documentElement.classList.contains('sidebar-expanded');
     }
     return false;
   });
 
-  // keep a ref to avoid unnecessary setState calls
   const lastValRef = useRef<boolean>(expanded);
 
   useEffect(() => {
-    // function that determines current expanded state by looking at cookie/localStorage/doc class
     const computeExpanded = (): boolean => {
       try {
         const cookieVal = readCookie('sidebar_state');
@@ -190,16 +181,12 @@ export function AppSidebar() {
       if (val !== lastValRef.current) {
         lastValRef.current = val;
         setExpanded(val);
-        // also keep document class in sync (good for other code expecting it)
         if (val) document.documentElement.classList.add('sidebar-expanded');
         else document.documentElement.classList.remove('sidebar-expanded');
       }
     };
 
-    // run immediately
     sync();
-
-    // poll every 300ms — cheap and reliable if another component toggles cookie/localStorage
     const timer = setInterval(sync, 300);
     return () => clearInterval(timer);
   }, []);
@@ -229,11 +216,14 @@ export function AppSidebar() {
                   className="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800"
                   as="a"
                 >
-                  {/* <-- CHANGE: icon size fixed so it stays identical when collapsed */}
-                  <Icon className="w-6 h-6" />
+                  {/* ✅ Icon wrapper to keep same size collapsed or expanded */}
+                  <div className="min-w-[24px] min-h-[24px] flex items-center justify-center">
+                    <Icon className="w-6 h-6" />
+                  </div>
 
-                  {/* title shown only when expanded */}
-                  <span className={expanded ? 'ml-2 inline text-sm' : 'ml-2 hidden'}>{it.title}</span>
+                  <span className={expanded ? 'ml-2 inline text-sm' : 'ml-2 hidden'}>
+                    {it.title}
+                  </span>
                 </Link>
               </div>
             );

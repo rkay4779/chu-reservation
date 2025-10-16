@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\JourFerie;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
+
 
 class JourFerieController extends Controller
 {
@@ -12,7 +14,10 @@ class JourFerieController extends Controller
      */
     public function index()
     {
-        //
+        $joursFeries = JourFerie::orderBy('date')->get();
+        return Inertia::render('admin/joursferies/gestion', [
+            'joursFeries' => $joursFeries,
+        ]);
     }
 
     /**
@@ -20,7 +25,7 @@ class JourFerieController extends Controller
      */
     public function create()
     {
-        //
+         
     }
 
     /**
@@ -28,8 +33,17 @@ class JourFerieController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+        'date' => 'required|date',
+        'description' => 'required|string|max:255',
+        'type' => 'required|in:nationale,religieuse,scolaire',
+        ]);
+
+        JourFerie::create($validated);
+
+        return back()->with('success', 'Jour férié ajouté avec succès !');
     }
+
 
     /**
      * Display the specified resource.

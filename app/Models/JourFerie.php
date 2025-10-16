@@ -9,7 +9,7 @@ class JourFerie extends Model
 {
     use HasFactory;
 
-    protected $table = 'jours_feries';
+    protected $table = 'jour_feries';
 
     // Champs assignables en masse
     protected $fillable = [

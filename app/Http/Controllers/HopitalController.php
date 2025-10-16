@@ -1,9 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Http\Controllers\Controller;
 use App\Models\Hopital;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class HopitalController extends Controller
 {
@@ -12,7 +13,7 @@ class HopitalController extends Controller
      */
     public function index()
     {
-        //
+        
     }
 
     /**
@@ -20,7 +21,7 @@ class HopitalController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('admin/hopitals/create');
     }
 
     /**
@@ -28,7 +29,14 @@ class HopitalController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'nom' => 'required|string|max:255|unique:hopitals,nom',
+            'description' => 'nullable|string|max:1000',
+        ]);
+
+        Hopital::create($validated);
+
+        return redirect()->route('hopitaux.create')->with('success', 'Hôpital ajouté avec succès.');
     }
 
     /**

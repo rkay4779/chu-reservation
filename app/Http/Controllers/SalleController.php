@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Salle;
+use App\Models\Hopital;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
+use App\Models\SecretaireSalle;
 
 class SalleController extends Controller
 {
@@ -20,7 +23,11 @@ class SalleController extends Controller
      */
     public function create()
     {
-        //
+        $hopitaux = Hopital::select('id', 'nom')->get();
+
+        return Inertia::render('admin/salles/create', [
+            'hopitaux' => $hopitaux,
+        ]);
     }
 
     /**
@@ -28,9 +35,44 @@ class SalleController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $validated = $request->validate([
+            'nom' => 'required|string|max:255',
+            'description' => 'nullable|string|max:1000',
+            'capacite' => 'required|integer|min:1',
+            'hopital_id' => 'required|exists:hopitals,id',
+        ]);
 
+        Salle::create($validated);
+
+        return redirect()->route('salles.create')->with('success', 'Salle ajoutée avec succès.');
+    }
+    // public function affecterSecretaireForm()
+    // {
+    // $secretaires = User::whereHas('profil', function ($query) {
+    //     $query->where('nom', 'secretaire');
+    // })->select('id', 'name')->get();
+
+    // $salles = Salle::select('id', 'nom')->get();
+
+    // return Inertia::render('admin/salles/affectationSalleSecretaire', [
+    //     'secretaires' => $secretaires,
+    //     'salles' => $salles,
+    //     'success' => session('success'),
+    // ]);
+    // }
+
+    // public function affecterSecretaire(Request $request)
+    // {
+    // $validated = $request->validate([
+    //     'secretaire_id' => 'required|exists:users,id',
+    //     'salle_id' => 'required|exists:salles,id',
+    // ]);
+
+    // // Évite les doublons
+    // SecretaireSalle::firstOrCreate($validated);
+
+    // return redirect()->route('salles.affecterSecretaireForm')->with('success', 'Salle affectée au secrétaire avec succès.');
+    // }
     /**
      * Display the specified resource.
      */
