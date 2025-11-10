@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany; // ajoute cette ligne en haut
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class User extends Authenticatable
@@ -62,10 +63,18 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Service::class, 'service_id', 'id');
     }
+    public function salles(): BelongsToMany
+    {
+        return $this->belongsToMany(Salle::class, 'secretaire_salles', 'secretaire_id', 'salle_id');
+    }
 
     public function profil(): BelongsTo
     {
         return $this->belongsTo(Profil::class, 'profil_id', 'id');
+    }
+    public function groupes(): BelongsToMany
+    {
+        return $this->belongsToMany(Groupe::class, 'groupe_utilisateur', 'utilisateur_id', 'groupe_id');
     }
 
     /**

@@ -44,6 +44,7 @@ class HandleInertiaRequests extends Middleware
                 ? $request->user()->loadMissing('profil:id,libelle')->only(['id','name','email','profil'])
                 : null,
         ],
+        'success' => fn () => $request->session()->get('success'),
     ]);
     }
 

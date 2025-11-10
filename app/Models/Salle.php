@@ -26,4 +26,10 @@ class Salle extends Model
     {
         return $this->belongsTo(Hopital::class, 'hopital_id', 'id');
     }
+    // Salle.php
+public function secretaires()
+{
+    return $this->belongsToMany(User::class, 'secretaire_salles', 'salle_id', 'secretaire_id');
+}
+
 }

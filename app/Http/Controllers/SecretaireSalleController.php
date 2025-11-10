@@ -15,17 +15,18 @@ class SecretaireSalleController extends Controller
      */
     public function index()
     {
-        dd('Index method hit');
+        // dd('Index method hit');
+        // dd('Index method hit');
         $secretaires = User::whereHas('profil', function ($query) {
-            $query->where('nom', 'secretaire');
+            $query->where('libelle', 'secretaire');
         })->select('id', 'name')->get();
 
         $salles = Salle::select('id', 'nom')->get();
 
-        return Inertia::render('admin/salles/affecter-secretaire', [
+        return Inertia::render('admin/secretairesalle/affectersecretaire', [
             'secretaires' => $secretaires,
             'salles' => $salles,
-            'success' => session('success'),
+            // 'success' => session('success'),
         ]);
     }
 

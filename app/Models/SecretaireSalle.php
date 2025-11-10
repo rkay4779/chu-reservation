@@ -9,7 +9,7 @@ class SecretaireSalle extends Model
 {
     use HasFactory;
 
-    protected $table = 'secretaire_salle';
+    protected $table = 'secretaire_salles';
 
     // Champs assignables en masse
     protected $fillable = [

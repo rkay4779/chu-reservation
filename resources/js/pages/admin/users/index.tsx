@@ -446,7 +446,7 @@ const UserIndex: React.FC = () => {
 
         {/* Search and Filters */}
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
-          <input
+          {/* <input
             type="text"
             name="name"
             value={formFilters.name}
@@ -495,7 +495,58 @@ const UserIndex: React.FC = () => {
                 {s.libelle}
               </option>
             ))}
-          </select>
+          </select> */}
+          <input
+  type="text"
+  name="name"
+  value={formFilters.name}
+  onChange={handleChange}
+  placeholder="Rechercher par nom"
+  className="border border-gray-300 dark:border-gray-600 bg-white dark:bg-black text-black dark:text-white px-3 py-2 rounded-md"
+/>
+
+<select
+  name="profil_id"
+  value={formFilters.profil_id}
+  onChange={handleChange}
+  className="border border-gray-300 dark:border-gray-600 bg-white dark:bg-black text-black dark:text-white px-3 py-2 rounded-md"
+>
+  <option value="">-- Filtrer par profil --</option>
+  {profils.map((p) => (
+    <option key={p.id} value={p.id.toString()}>
+      {p.libelle}
+    </option>
+  ))}
+</select>
+
+<select
+  name="service_id"
+  value={formFilters.service_id}
+  onChange={handleChange}
+  className="border border-gray-300 dark:border-gray-600 bg-white dark:bg-black text-black dark:text-white px-3 py-2 rounded-md"
+>
+  <option value="">-- Filtrer par service --</option>
+  {services.map((s) => (
+    <option key={s.id} value={s.id.toString()}>
+      {s.libelle}
+    </option>
+  ))}
+</select>
+
+<select
+  name="specialite_id"
+  value={formFilters.specialite_id}
+  onChange={handleChange}
+  className="border border-gray-300 dark:border-gray-600 bg-white dark:bg-black text-black dark:text-white px-3 py-2 rounded-md"
+>
+  <option value="">-- Filtrer par spécialité --</option>
+  {specialites.map((s) => (
+    <option key={s.id} value={s.id.toString()}>
+      {s.libelle}
+    </option>
+  ))}
+</select>
+
 
           <button
             onClick={handleSearch}

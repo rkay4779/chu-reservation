@@ -9,11 +9,11 @@ class DemandeReservation extends Model
 {
     use HasFactory;
 
-    protected $table = 'demandes_reservations';
+    protected $table = 'demande_reservations';
 
     // Champs assignables en masse
     protected $fillable = [
-        'utilisateur_id',
+        'user_id',
         'salle_id',
         'date_reunion',
         'heure_debut',
@@ -29,9 +29,9 @@ class DemandeReservation extends Model
     /**
      * Relation: une demande appartient à un utilisateur.
      */
-    public function utilisateur()
+    public function user()
     {
-        return $this->belongsTo(Utilisateur::class, 'user_id', 'id');
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
     /**
@@ -41,6 +41,13 @@ class DemandeReservation extends Model
     {
         return $this->belongsTo(Salle::class, 'salle_id', 'id');
     }
+
+public function participants()
+{
+    return $this->hasMany(Participant::class, 'demande_id');
+}
+
+
 
     /**
      * Les statuts possibles pour la demande.
