@@ -203,54 +203,40 @@ export default function GestionDemandes({ demandes, joursFeries }: Props) {
   const [showMotifInput, setShowMotifInput] = useState<{ [id: number]: boolean }>({})
   const [localStatus, setLocalStatus] = useState<{ [id: number]: Statut }>({})
 
-//   const handleAccept = (id: number) => {
-//   router.post(`/secretaire/demandes/${id}/accepter`, {}, {
-//     onSuccess: () => {
-//       setLocalStatus({ ...localStatus, [id]: 'validee' })
-//     },
-//   })
-// }
-const handleAccept = (id: number) => {
+  const handleAccept = (id: number) => {
   router.post(`/secretaire/demandes/${id}/accepter`, {}, {
-    preserveState: true,
-    preserveScroll: true,
     onSuccess: () => {
-      setLocalStatus((prev) => ({ ...prev, [id]: 'validee' }))
+      setLocalStatus({ ...localStatus, [id]: 'validee' })
     },
   })
 }
 
 
+// const handleAccept = (id: number) => {
+//   router.post(`/secretaire/demandes/${id}/accepter`, {}, {
+//     preserveState: true,
+//     preserveScroll: true,
+//     onSuccess: () => {
+//       setLocalStatus((prev) => ({ ...prev, [id]: 'validee' }))
+//     },
+//   })
+// }
 
   const handleRefuse = (id: number) => {
     // Hide all buttons and show input field
     setShowMotifInput({ ...showMotifInput, [id]: true })
   }
 
-//   const submitMotif = (id: number) => {
-//   router.post(`/secretaire/demandes/${id}/refuser`, {
-//     motif_refus: motifs[id],
-//   }, {
-//     onSuccess: () => {
-//       setLocalStatus({ ...localStatus, [id]: 'refusée' })
-//       setShowMotifInput({ ...showMotifInput, [id]: false })
-//     },
-//   })
-// }
-const submitMotif = (id: number) => {
+  const submitMotif = (id: number) => {
   router.post(`/secretaire/demandes/${id}/refuser`, {
     motif_refus: motifs[id],
   }, {
-    preserveState: true,
-    preserveScroll: true,
     onSuccess: () => {
-      setLocalStatus((prev) => ({ ...prev, [id]: 'refusée' }))
-      setShowMotifInput((prev) => ({ ...prev, [id]: false }))
+      setLocalStatus({ ...localStatus, [id]: 'refusée' })
+      setShowMotifInput({ ...showMotifInput, [id]: false })
     },
   })
 }
-
-
 
   const getStatutDisplay = (statut: Statut) => {
     switch (statut) {

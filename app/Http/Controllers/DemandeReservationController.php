@@ -9,6 +9,8 @@ use App\Models\Hopital;
 use App\Models\Groupe;
 use App\Models\User;
 use App\Models\SecretaireSalle;
+use App\Mail\DemandeStatusNotification;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -84,15 +86,80 @@ class DemandeReservationController extends Controller
         'joursFeries' => $joursFeries,
     ]);
     }
+    private function getParticipantEmail($participant)
+    {
+    switch ($participant->type) {
+
+        case 'nom':
+    // valeur = user name, so we search by name
+    $user = \App\Models\User::where('name', $participant->valeur)->first();
+    return $user?->email;
+
+
+        case 'profil':
+    $profil = \App\Models\User::where('name', $participant->valeur)->first();
+    return $profil?->email;
+
+
+        case 'nouveau':
+    // Extract email from string like "name <email@example.com>"
+    preg_match('/<([^>]+)>/', $participant->valeur, $matches);
+    return $matches[1] ?? $participant->valeur;
+
+
+        case 'groupe':
+            // valeur = group name → send to all users in that group
+            $group = \App\Models\Groupe::where('nom', $participant->valeur)->first();
+            if ($group) {
+                // dd($group->utilisateurs->pluck('email')->toArray());
+                return $group->utilisateurs->pluck('email')->toArray();
+            }
+            return null;
+
+        default:
+            return null;
+    }
+    }
+
     public function accepter(Request $request, $id)
     {
     $demande = DemandeReservation::findOrFail($id);
     $demande->statut = 'validee';
     $demande->save();
 
+    Mail::to($demande->user->email)->send(
+        new DemandeStatusNotification($demande, 'Validée', auth()->user())
+    );
+    // dd($demande->participants);
+    foreach ($demande->participants as $participant) {
+        //   dd($participant->type, $participant->valeur);
+    $emails = $this->getParticipantEmail($participant);
+    //  dd($emails);
+
+    if (!$emails) continue;
+
+    // If it's a single email
+    if (is_string($emails)) {
+        Mail::to($emails)->send(
+            new DemandeStatusNotification($demande, 'Validée', auth()->user())
+        );
+    }
+
+    // If it's multiple emails (array)
+    if (is_array($emails)) {
+        foreach ($emails as $email) {
+            // dd($email); 
+            Mail::to($email)->send(
+                new DemandeStatusNotification($demande, 'Validée', auth()->user())
+            );
+        }
+    }
+}
     session()->flash('reservation_notification_' . $demande->user_id, 'Votre demande a été acceptée.');
     return back()->with('success', 'Demande acceptée.');
     }
+
+
     public function refuser(Request $request, $id)
     {
     $request->validate([
@@ -103,6 +170,29 @@ class DemandeReservationController extends Controller
     $demande->statut = 'Refusée';
     $demande->motif_refus = $request->motif_refus;
     $demande->save();
+
+    Mail::to($demande->user->email)->send(
+        new DemandeStatusNotification($demande, 'Refusée', auth()->user(), $request->motif_refus)
+    );
+    foreach ($demande->participants as $participant) {
+        $emails = $this->getParticipantEmail($participant);
+
+        if (!$emails) continue;
+
+        if (is_string($emails)) {
+            Mail::to($emails)->send(
+                new DemandeStatusNotification($demande, 'Refusée', auth()->user(), $request->motif_refus)
+            );
+        }
+
+        if (is_array($emails)) {
+            foreach ($emails as $email) {
+                Mail::to($email)->send(
+                    new DemandeStatusNotification($demande, 'Refusée', auth()->user(), $request->motif_refus)
+                );
+            }
+        }
+    }
 
     session()->flash('reservation_notification_' . $demande->user_id, 'Votre demande a été refusée.');
     return back()->with('success', 'Demande refusée.');
@@ -181,129 +271,6 @@ class DemandeReservationController extends Controller
      * Store a newly created resource in storage.
      */
 
-    // public function store(Request $request)
-    // {
-    // $data = $request->validate([
-    //     'salle_id' => 'required|exists:salles,id',
-    //     'date' => 'required|date',
-    //     'heure_debut' => 'required',
-    //     'heure_fin' => 'required',
-    //     'ordre_du_jour' => 'required|string|max:255',
-    //     'materiel' => 'nullable|array',
-    //     'autre_materiel' => 'nullable|string|max:255',
-    //     'commentaire' => 'nullable|string|max:500',
-    //     'participants' => 'nullable|array',
-    //     'participants.*.type' => 'required|string|in:groupe,profil,nom,nouveau',
-    //     'participants.*.valeur' => 'required|string|max:255',
-    // ]);
-
-    // if (!auth()->check()) {
-    //     return redirect()->back()->withErrors(['auth' => 'Utilisateur non connecté.']);
-    // }
-
-    // // ✅ Ajout utilisateur connecté
-    // $data['user_id'] = auth()->id();
-    // $data['statut'] = 'attente';
-
-    // // ✅ Traitement du matériel
-    // $data['materiels'] = isset($data['materiel']) ? implode(', ', $data['materiel']) : null;
-
-    // // ✅ Renommer les champs
-    // $data['date_reunion'] = $data['date'];
-    // $data['sujet'] = $data['ordre_du_jour'];
-
-    // // ✅ Calcul durée
-    // $dureeMinutes = (strtotime($data['heure_fin']) - strtotime($data['heure_debut'])) / 60;
-    // $data['duree'] = max(1, (int) $dureeMinutes);
-
-    // // ✅ Nettoyer avant insertion
-    // unset($data['date'], $data['ordre_du_jour'], $data['materiel'], $data['participants']);
-
-    // // ✅ Création de la demande
-    // $demande = DemandeReservation::create($data);
-
-    // // ✅ Ajout des participants
-    // if ($request->has('participants')) {
-    //     foreach ($request->participants as $participant) {
-    //         $demande->participants()->create([
-    //             'type' => $participant['type'],
-    //             'valeur' => $participant['valeur'],
-    //         ]);
-    //     }
-    // }
-
-    // return redirect()->back()->with('success', 'Demande envoyée avec succès avec participants.');
-    // }
-
-//     public function store(Request $request)
-// {
-//     $data = $request->validate([
-//         'salle_id' => 'required|exists:salles,id',
-//         'date' => 'required|date',
-//         'heure_debut' => 'required',
-//         'heure_fin' => 'required',
-//         'ordre_du_jour' => 'required|string|max:255',
-//         'materiel' => 'nullable|array',
-//         'autre_materiel' => 'nullable|string|max:255',
-//         'commentaire' => 'nullable|string|max:500',
-//         'participants' => 'nullable|array',
-//         'participants.*.type' => 'required|string|in:groupe,profil,nom,nouveau',
-//         'participants.*.valeur' => 'required|string|max:255',
-//     ]);
-
-//     if (!auth()->check()) {
-//         return redirect()->back()->withErrors(['auth' => 'Utilisateur non connecté.']);
-//     }
-
-//     $data['user_id'] = auth()->id();
-//     $data['statut'] = 'attente';
-//     $data['materiels'] = isset($data['materiel']) ? implode(', ', $data['materiel']) : null;
-//     $data['date_reunion'] = $data['date'];
-//     $data['sujet'] = $data['ordre_du_jour'];
-
-//     $dureeMinutes = (strtotime($data['heure_fin']) - strtotime($data['heure_debut'])) / 60;
-//     $data['duree'] = max(1, (int) $dureeMinutes);
-
-//     // ✅ Nettoyage
-//     unset($data['date'], $data['ordre_du_jour'], $data['materiel'], $data['participants']);
-
-//     // ✅ Création de la demande
-//     $demande = DemandeReservation::create($data);
-
-//     // ✅ Ajout des participants
-//     if ($request->has('participants')) {
-//         Log::info('Participants reçus côté backend', $request->participants);
-
-//         foreach ($request->participants as $participant) {
-//             Log::info('Création participant:', $participant);
-
-//             if (isset($participant['type'], $participant['valeur'])) {
-//                 $valeur = $participant['valeur'];
-
-//                 // 🔹 Si le type = "profil" et la valeur est un ID utilisateur → on récupère son nom
-//                 if ($participant['type'] === 'profil' && is_numeric($valeur)) {
-//                     $user = \App\Models\User::find($valeur);
-//                     if ($user) {
-//                         $valeur = $user->name;
-//                     }
-//                 }
-
-//                 // 🔹 Si le type = "groupe" → on peut garder le nom déjà envoyé depuis le front
-//                 // 🔹 Si le type = "nom" → c’est déjà un nom libre
-//                 // 🔹 Si le type = "nouveau" → contient déjà "Nom <Email>"
-
-//                 $demande->participants()->create([
-//                     'type' => $participant['type'],
-//                     'valeur' => $valeur,
-//                 ]);
-//             }
-//         }
-//     } else {
-//         Log::warning('Aucun participant reçu');
-//     }
-
-//     return redirect()->back()->with('success', 'Demande envoyée avec succès avec participants.');
-// }
     public function store(Request $request)
     {
     $data = $request->validate([

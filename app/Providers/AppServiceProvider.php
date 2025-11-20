@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Mail\Events\MessageSending;
+use Illuminate\Mail\Events\MessageSent;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
 use Inertia\Inertia;
 
@@ -23,10 +27,9 @@ class AppServiceProvider extends ServiceProvider
         Inertia::share([
         'success' => fn () => session('success'),
     ]);
-    Inertia::setRootView('app'); // keep this if it’s already here
-
-    // 👇 Tell Inertia to load from lowercase "pages"
+    Inertia::setRootView('app'); 
     Inertia::version(fn () => md5_file(public_path('mix-manifest.json')));
     Inertia::share([]);
+
     }
 }
