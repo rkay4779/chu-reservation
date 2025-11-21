@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('jour_feries', function (Blueprint $table) {
             $table->id();
-             $table->date('date')->unique();
+            $table->date('date')->unique();
             $table->string('description');
             $table->enum('type', ['nationale', 'religieuse', 'scolaire']);
             $table->timestamps();

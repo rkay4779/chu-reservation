@@ -62,7 +62,7 @@ class CheckRole
         }
 
         $allowed = collect(explode(',', (string) $roles))
-            ->map(fn($r) => Str::lower(Str::ascii(trim($r))))
+            ->map(fn ($r) => Str::lower(Str::ascii(trim($r))))
             ->filter()
             ->all();
 

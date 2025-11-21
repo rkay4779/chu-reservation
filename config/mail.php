@@ -36,16 +36,16 @@ return [
     */
 
     'mailers' => [
-    'smtp' => [
-        'transport' => 'smtp',
-        'host' => env('MAIL_HOST', 'smtp.gmail.com'),
-        'port' => env('MAIL_PORT', 587),
-        'encryption' => env('MAIL_ENCRYPTION', 'tls'),
-        'username' => env('MAIL_USERNAME'),
-        'password' => env('MAIL_PASSWORD'),
-        'timeout' => null,
-        'auth_mode' => null,
-    ],
+        'smtp' => [
+            'transport' => 'smtp',
+            'host' => env('MAIL_HOST', 'smtp.gmail.com'),
+            'port' => env('MAIL_PORT', 587),
+            'encryption' => env('MAIL_ENCRYPTION', 'tls'),
+            'username' => env('MAIL_USERNAME'),
+            'password' => env('MAIL_PASSWORD'),
+            'timeout' => null,
+            'auth_mode' => null,
+        ],
 
         'ses' => [
             'transport' => 'ses',
@@ -106,14 +106,13 @@ return [
     |
     */
 
-//     'from' => [
-//     'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
-//     'name' => env('MAIL_FROM_NAME', 'Example'),
-// ],
+    //     'from' => [
+    //     'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
+    //     'name' => env('MAIL_FROM_NAME', 'Example'),
+    // ],
     'from' => [
-    'address' => env('MAIL_FROM_ADDRESS', 'riyadh.kd10@gmail.com'),
-    'name' => env('MAIL_FROM_NAME', 'CHU Réservations'),
-],
-
+        'address' => env('MAIL_FROM_ADDRESS', 'riyadh.kd10@gmail.com'),
+        'name' => env('MAIL_FROM_NAME', 'CHU Réservations'),
+    ],
 
 ];

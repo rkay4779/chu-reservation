@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('commentaire', 500)->nullable();
             $table->enum('statut', ['attente', 'validee', 'refusee'])->default('attente');
             $table->string('motif_refus', 500)->nullable();
-                    
+
             $table->timestamps();
         });
     }

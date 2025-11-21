@@ -14,7 +14,7 @@ class Specialite extends Model
     // Champs assignables en masse
     protected $fillable = [
         'libelle',
-        'service_id'
+        'service_id',
     ];
 
     /**
@@ -24,6 +24,7 @@ class Specialite extends Model
     {
         return $this->hasMany(User::class, 'specialite_id', 'id');
     }
+
     public function service()
     {
         return $this->belongsTo(Service::class, 'service_id');

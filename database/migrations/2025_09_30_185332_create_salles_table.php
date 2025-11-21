@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('salles', function (Blueprint $table) {
             $table->id();
-             $table->string('nom');
+            $table->string('nom');
             $table->string('description')->nullable();
             $table->integer('capacite');
-            
+
             $table->foreignId('hopital_id')->constrained('hopitals')->onDelete('cascade');
             $table->timestamps();
         });

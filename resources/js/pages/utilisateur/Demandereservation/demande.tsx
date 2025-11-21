@@ -41,164 +41,96 @@ interface PageProps {
 export default function DemandeReservation() {
   const { salles, groupes, joursFeries, utilisateurs } = usePage<PageProps>().props;
 
-  // const { data, setData, post, processing, reset, errors } = useForm({
-  //   salle_id: '',
-  //   date: '',
-  //   heure_debut: '',
-  //   heure_fin: '',
-  //   ordre_du_jour: '',  
-  //   materiel: [] as string[],
-  //   autre_materiel: '',
-  //   commentaire: '',
-  //   typeParticipant: '',
-  //   valeur: '',
-  //   profilSelectionne: '',
-  //   utilisateurSelectionne: '',
-  //   nouveauNom: '',
-  //   nouveauEmail: '',
-  // });
   const { data, setData, post, processing, reset, errors } = useForm({
-  salle_id: '',
-  date: '',
-  heure_debut: '',
-  heure_fin: '',
-  ordre_du_jour: '',
-  materiel: [] as string[],
-  autre_materiel: '',
-  commentaire: '',
-  typeParticipant: '',
-  valeur: '',
-  profilSelectionne: '',
-  utilisateurSelectionne: '',
-  nouveauNom: '',
-  nouveauEmail: '',
-  participants: [] as { type: string; valeur: string }[], // ✅ NEW LINE
-});
+    salle_id: '',
+    date: '',
+    heure_debut: '',
+    heure_fin: '',
+    ordre_du_jour: '',
+    materiel: [] as string[],
+    autre_materiel: '',
+    commentaire: '',
+    typeParticipant: '',
+    valeur: '',
+    profilSelectionne: '',
+    utilisateurSelectionne: '',
+    nouveauNom: '',
+    nouveauEmail: '',
+    participants: [] as { type: string; valeur: string }[], // ✅ NEW LINE
+  });
 
 
-//   const handleSubmit = (e: FormEvent) => {
-//   e.preventDefault();
-//   post('/utilisateur/demande-reservation', {
-//     onSuccess: () => {
-//       reset(); // nettoie le formulaire
-//     },
-//     onError: () => {
-//       console.error('Erreur lors de l’envoi');
-//     }
-//   });
-// };
-// 
-// const handleSubmit = (e: FormEvent) => {
-//   e.preventDefault();
-
-//   const newParticipants: { type: string; valeur: string }[] = [];
-
-//   if (data.typeParticipant === 'groupe' && data.valeur) {
-//     newParticipants.push({ type: 'groupe', valeur: data.valeur });
-//   }
-
-//   if (data.typeParticipant === 'profil' && data.utilisateurSelectionne) {
-//     newParticipants.push({ type: 'profil', valeur: data.utilisateurSelectionne });
-//   }
-
-//   if (data.typeParticipant === 'nom' && data.valeur) {
-//     newParticipants.push({ type: 'nom', valeur: data.valeur });
-//   }
-
-//   if (data.typeParticipant === 'nouveau' && data.nouveauNom && data.nouveauEmail) {
-//     newParticipants.push({
-//       type: 'nouveau',
-//       valeur: `${data.nouveauNom} <${data.nouveauEmail}>`,
-//     });
-//   }
-
-//   // 🔁 Update state
-//   setData('participants', newParticipants);
-//   console.log('Sending participants:', newParticipants);
-//   // ⏳ Wait a tick so that setData finishes
-//   setTimeout(() => {
-//     post('/utilisateur/demande-reservation', {
-//       onSuccess: () => {
-//         console.log("✅ Participant sent");
-//         reset();
-//       },
-//       onError: () => {
-//         console.error("❌ Erreur lors de l’envoi");
-//       }
-//     });
-//   }, 100); // <- crucial delay
-// };
   const addParticipant = () => {
-  let valeur = '';
+    let valeur = '';
 
-  if (data.typeParticipant === 'profil' && data.utilisateurSelectionne) {
-    valeur = data.utilisateurSelectionne;
-  } else if (data.typeParticipant === 'groupe' && data.valeur) {
-    valeur = data.valeur;
-  } else if (data.typeParticipant === 'nom' && data.valeur) {
-    valeur = data.valeur;
-  } else if (data.typeParticipant === 'nouveau' && data.nouveauNom && data.nouveauEmail) {
-    valeur = `${data.nouveauNom} <${data.nouveauEmail}>`;
-  } else {
-    return; // Rien à ajouter
-  }
+    if (data.typeParticipant === 'profil' && data.utilisateurSelectionne) {
+      valeur = data.utilisateurSelectionne;
+    } else if (data.typeParticipant === 'groupe' && data.valeur) {
+      valeur = data.valeur;
+    } else if (data.typeParticipant === 'nom' && data.valeur) {
+      valeur = data.valeur;
+    } else if (data.typeParticipant === 'nouveau' && data.nouveauNom && data.nouveauEmail) {
+      valeur = `${data.nouveauNom} <${data.nouveauEmail}>`;
+    } else {
+      return; // Rien à ajouter
+    }
 
-  const nouveau = { type: data.typeParticipant, valeur };
+    const nouveau = { type: data.typeParticipant, valeur };
 
-  setData('participants', [...data.participants, nouveau]);
+    setData('participants', [...data.participants, nouveau]);
 
-  // Reset
-  setData('typeParticipant', '');
-  setData('valeur', '');
-  setData('utilisateurSelectionne', '');
-  setData('profilSelectionne', '');
-  setData('nouveauNom', '');
-  setData('nouveauEmail', '');
-};
-const handleSubmit = (e: FormEvent) => {
-  e.preventDefault();
+    // Reset
+    setData('typeParticipant', '');
+    setData('valeur', '');
+    setData('utilisateurSelectionne', '');
+    setData('profilSelectionne', '');
+    setData('nouveauNom', '');
+    setData('nouveauEmail', '');
+  };
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
 
-  const newParticipants: { type: string; valeur: string }[] = [];
+    const newParticipants: { type: string; valeur: string }[] = [];
 
-  if (data.typeParticipant === 'groupe' && data.valeur) {
-    newParticipants.push({ type: 'groupe', valeur: data.valeur });
-  }
+    if (data.typeParticipant === 'groupe' && data.valeur) {
+      newParticipants.push({ type: 'groupe', valeur: data.valeur });
+    }
 
-  if (data.typeParticipant === 'profil' && data.utilisateurSelectionne) {
-    newParticipants.push({ type: 'profil', valeur: data.utilisateurSelectionne });
-  }
+    if (data.typeParticipant === 'profil' && data.utilisateurSelectionne) {
+      newParticipants.push({ type: 'profil', valeur: data.utilisateurSelectionne });
+    }
 
-  if (data.typeParticipant === 'nom' && data.valeur) {
-    newParticipants.push({ type: 'nom', valeur: data.valeur });
-  }
+    if (data.typeParticipant === 'nom' && data.valeur) {
+      newParticipants.push({ type: 'nom', valeur: data.valeur });
+    }
 
-  if (data.typeParticipant === 'nouveau' && data.nouveauNom && data.nouveauEmail) {
-    newParticipants.push({
-      type: 'nouveau',
-      valeur: `${data.nouveauNom} <${data.nouveauEmail}>`,
-    });
-  }
+    if (data.typeParticipant === 'nouveau' && data.nouveauNom && data.nouveauEmail) {
+      newParticipants.push({
+        type: 'nouveau',
+        valeur: `${data.nouveauNom} <${data.nouveauEmail}>`,
+      });
+    }
 
-  console.log('🚀 Participants à envoyer :', newParticipants);
+    console.log('🚀 Participants à envoyer :', newParticipants);
 
 
 
-  // ✅ Inertia accepte SEULEMENT 2 arguments : (url, options)
-  post(
-  '/utilisateur/demande-reservation',
-  {
-    ...(data as any), // ✅ bypass typage strict
-    participants: newParticipants, // ✅ ajouté ici
-    onSuccess: () => {
-      console.log("✅ Participants envoyés avec succès !");
-      reset();
-    },
-    onError: () => {
-      console.error("❌ Erreur lors de l'envoi du formulaire");
-    },
-  } as any // ✅ 2e sécurité : empêche TS de râler sur les clés custom
-);
-};
+    // ✅ Inertia accepte SEULEMENT 2 arguments : (url, options)
+    post(
+      '/utilisateur/demande-reservation',
+      {
+        ...(data as any), // ✅ bypass typage strict
+        participants: newParticipants, // ✅ ajouté ici
+        onSuccess: () => {
+          console.log("✅ Participants envoyés avec succès !");
+          reset();
+        },
+        onError: () => {
+          console.error("❌ Erreur lors de l'envoi du formulaire");
+        },
+      } as any // ✅ 2e sécurité : empêche TS de râler sur les clés custom
+    );
+  };
 
 
 
@@ -358,67 +290,67 @@ const handleSubmit = (e: FormEvent) => {
                     ))}
                   </select>
                   <button
-  type="button"
-  onClick={addParticipant}
-  className="mt-2 bg-green-600 text-white px-4 py-1 rounded hover:bg-green-700"
->
-  Ajouter ce participant
-</button>
+                    type="button"
+                    onClick={addParticipant}
+                    className="mt-2 bg-green-600 text-white px-4 py-1 rounded hover:bg-green-700"
+                  >
+                    Ajouter ce participant
+                  </button>
 
                 </div>
               )}
               {/* PROFIL → profil puis utilisateur */}
-{data.typeParticipant === 'profil' && (
-  <div className="mt-2">
-    <label className="block text-gray-700 dark:text-gray-200 mb-1">Profil</label>
-    <select
-      value={data.profilSelectionne}
-      onChange={(e) => {
-        setData('profilSelectionne', e.target.value);
-        setData('utilisateurSelectionne', ''); // Reset l'utilisateur sélectionné
-      }}
-      className="w-full border rounded p-2 dark:bg-gray-800 dark:text-white"
-    >
-      <option value="">-- Choisir un profil --</option>
-      {/* <option value="secretaire">Secrétaire</option> */}
-      <option value="utilisateur">Utilisateur</option>
-      <option value="admin">Admin</option>
-    </select>
+              {data.typeParticipant === 'profil' && (
+                <div className="mt-2">
+                  <label className="block text-gray-700 dark:text-gray-200 mb-1">Profil</label>
+                  <select
+                    value={data.profilSelectionne}
+                    onChange={(e) => {
+                      setData('profilSelectionne', e.target.value);
+                      setData('utilisateurSelectionne', ''); // Reset l'utilisateur sélectionné
+                    }}
+                    className="w-full border rounded p-2 dark:bg-gray-800 dark:text-white"
+                  >
+                    <option value="">-- Choisir un profil --</option>
+                    {/* <option value="secretaire">Secrétaire</option> */}
+                    <option value="utilisateur">Utilisateur</option>
+                    <option value="admin">Admin</option>
+                  </select>
 
-    {data.profilSelectionne && (
-      <div className="mt-2">
-        <label className="block text-gray-700 dark:text-gray-200 mb-1">
-          Choisir {data.profilSelectionne}
-        </label>
-        <select
-          value={data.utilisateurSelectionne}
-          onChange={(e) => setData('utilisateurSelectionne', e.target.value)}
-          className="w-full border rounded p-2 dark:bg-gray-800 dark:text-white"
-        >
-          <option value="">-- Sélectionner --</option>
-          {utilisateurs
-            .filter((u) =>
-              u.profil &&
-              u.profil.libelle &&
-              u.profil.libelle.toLowerCase() === data.profilSelectionne.toLowerCase()
-            )
-            .map((user) => (
-              <option key={user.id} value={user.id}>
-                {user.name} - {user.email}
-              </option>
-            ))}
-        </select>
-        <button
-  type="button"
-  onClick={addParticipant}
-  className="mt-2 bg-green-600 text-white px-4 py-1 rounded hover:bg-green-700"
->
-  Ajouter ce participant
-</button>
-      </div>
-    )}
-  </div>
-)}
+                  {data.profilSelectionne && (
+                    <div className="mt-2">
+                      <label className="block text-gray-700 dark:text-gray-200 mb-1">
+                        Choisir {data.profilSelectionne}
+                      </label>
+                      <select
+                        value={data.utilisateurSelectionne}
+                        onChange={(e) => setData('utilisateurSelectionne', e.target.value)}
+                        className="w-full border rounded p-2 dark:bg-gray-800 dark:text-white"
+                      >
+                        <option value="">-- Sélectionner --</option>
+                        {utilisateurs
+                          .filter((u) =>
+                            u.profil &&
+                            u.profil.libelle &&
+                            u.profil.libelle.toLowerCase() === data.profilSelectionne.toLowerCase()
+                          )
+                          .map((user) => (
+                            <option key={user.id} value={user.id}>
+                              {user.name} - {user.email}
+                            </option>
+                          ))}
+                      </select>
+                      <button
+                        type="button"
+                        onClick={addParticipant}
+                        className="mt-2 bg-green-600 text-white px-4 py-1 rounded hover:bg-green-700"
+                      >
+                        Ajouter ce participant
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
 
 
               {/* NOM → auto-suggestion */}
@@ -443,12 +375,12 @@ const handleSubmit = (e: FormEvent) => {
                       ))}
                   </datalist>
                   <button
-  type="button"
-  onClick={addParticipant}
-  className="mt-2 bg-green-600 text-white px-4 py-1 rounded hover:bg-green-700"
->
-  Ajouter ce participant
-</button>
+                    type="button"
+                    onClick={addParticipant}
+                    className="mt-2 bg-green-600 text-white px-4 py-1 rounded hover:bg-green-700"
+                  >
+                    Ajouter ce participant
+                  </button>
                 </div>
               )}
 
@@ -477,12 +409,12 @@ const handleSubmit = (e: FormEvent) => {
                   </div>
                   <input type="hidden" name="profil" value="invite" />
                   <button
-  type="button"
-  onClick={addParticipant}
-  className="mt-2 bg-green-600 text-white px-4 py-1 rounded hover:bg-green-700"
->
-  Ajouter ce participant
-</button>
+                    type="button"
+                    onClick={addParticipant}
+                    className="mt-2 bg-green-600 text-white px-4 py-1 rounded hover:bg-green-700"
+                  >
+                    Ajouter ce participant
+                  </button>
                 </div>
               )}
 

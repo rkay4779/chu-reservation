@@ -46,26 +46,26 @@ export default function HistoriqueDemandes() {
   //   { label: 'Motif de Refus', accessor: 'motif_refus' },
   // ];
   const exportData = demandes.map((d) => ({
-  utilisateur: d.user?.name ?? '',
-  salle: d.salle?.nom ?? '',
-  date_reunion: d.date_reunion,
-  heure_debut: d.heure_debut,
-  duree: d.duree + ' min',
-  sujet: d.sujet,
-  statut: d.statut,
-  motif_refus: d.statut === 'refusee' ? d.motif_refus ?? '' : '',
-}));
+    utilisateur: d.user?.name ?? '',
+    salle: d.salle?.nom ?? '',
+    date_reunion: d.date_reunion,
+    heure_debut: d.heure_debut,
+    duree: d.duree + ' min',
+    sujet: d.sujet,
+    statut: d.statut,
+    motif_refus: d.statut === 'refusee' ? d.motif_refus ?? '' : '',
+  }));
 
-const columns = [
-  { label: 'Utilisateur', accessor: 'utilisateur' }, // ⬅️ new column
-  { label: 'Salle', accessor: 'salle' },
-  { label: 'Date Réunion', accessor: 'date_reunion' },
-  { label: 'Heure Début', accessor: 'heure_debut' },
-  { label: 'Durée', accessor: 'duree' },
-  { label: 'Sujet', accessor: 'sujet' },
-  { label: 'Statut', accessor: 'statut' },
-  { label: 'Motif de Refus', accessor: 'motif_refus' },
-];
+  const columns = [
+    { label: 'Utilisateur', accessor: 'utilisateur' }, // ⬅️ new column
+    { label: 'Salle', accessor: 'salle' },
+    { label: 'Date Réunion', accessor: 'date_reunion' },
+    { label: 'Heure Début', accessor: 'heure_debut' },
+    { label: 'Durée', accessor: 'duree' },
+    { label: 'Sujet', accessor: 'sujet' },
+    { label: 'Statut', accessor: 'statut' },
+    { label: 'Motif de Refus', accessor: 'motif_refus' },
+  ];
 
   return (
     <AppLayout>
@@ -97,7 +97,7 @@ const columns = [
             <tbody>
               {demandes.map((d) => (
                 <tr key={d.id} className="border-b">
-                  <td className="p-2">{d.user?.name}</td> 
+                  <td className="p-2">{d.user?.name}</td>
                   <td className="p-2">{d.salle?.nom}</td>
                   <td className="p-2">{d.date_reunion}</td>
                   <td className="p-2">{d.heure_debut}</td>

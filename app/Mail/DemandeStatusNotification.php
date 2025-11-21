@@ -11,8 +11,11 @@ class DemandeStatusNotification extends Mailable
     use Queueable, SerializesModels;
 
     public $demande;
+
     public $statut;
+
     public $secretaire;
+
     public $motif;
 
     public function __construct($demande, $statut, $secretaire, $motif = null)
@@ -29,7 +32,7 @@ class DemandeStatusNotification extends Mailable
 
         // Définit dynamiquement l'expéditeur
         return $this->from($this->secretaire->email, $this->secretaire->name)
-                    ->subject($objet)
-                    ->view('emails.demande-status');
+            ->subject($objet)
+            ->view('emails.demande-status');
     }
 }

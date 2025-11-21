@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Inertia\Inertia;
-use App\Models\User;
 use App\Models\Salle;
 use App\Models\SecretaireSalle;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class SecretaireSalleController extends Controller
 {
@@ -87,5 +87,4 @@ class SecretaireSalleController extends Controller
     {
         //
     }
-    
 }

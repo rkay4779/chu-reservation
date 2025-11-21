@@ -1,7 +1,7 @@
 <p>Bonjour {{ $demande->user->name }},</p>
 
 <p>
-    Nous vous informons que votre demande de réservation de salle a été 
+    Nous vous informons que votre demande de réservation de salle a été
     <strong>{{ $statut }}</strong>.
 </p>
 
@@ -13,8 +13,8 @@
     📌 Sujet : {{ $demande->sujet }}
 </p>
 
-@if($statut === 'Refusée' && $motif)
-<p><strong>Motif du refus :</strong> {{ $motif }}</p>
+@if ($statut === 'Refusée' && $motif)
+    <p><strong>Motif du refus :</strong> {{ $motif }}</p>
 @endif
 
 <br>

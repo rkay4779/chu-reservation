@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Groupe;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;  
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class GroupeController extends Controller
@@ -27,7 +27,6 @@ class GroupeController extends Controller
             'groupes' => $groupes,
         ]);
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -82,12 +81,14 @@ class GroupeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function removeUser(Groupe $groupe ,User $user)
+    public function removeUser(Groupe $groupe, User $user)
     {
         $groupe->utilisateurs()->detach($user->id);
+
         return redirect()->back()->with('success', 'Utilisateur retiré du groupe avec succès.');
 
     }
+
     public function destroy(Groupe $groupe)
     {
         DB::transaction(function () use ($groupe) {
@@ -99,5 +100,4 @@ class GroupeController extends Controller
 
         return redirect()->back()->with('success', 'Groupe supprimé avec succès.');
     }
-
 }

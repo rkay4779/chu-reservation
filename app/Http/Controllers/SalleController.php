@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Salle;
 use App\Models\Hopital;
+use App\Models\Salle;
+use App\Models\SecretaireSalle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
-use App\Models\SecretaireSalle;
 
 class SalleController extends Controller
 {
@@ -18,21 +18,22 @@ class SalleController extends Controller
     {
         //
     }
+
     public function mesSalles()
-{
-    $secretaireId = Auth::id();
+    {
+        $secretaireId = Auth::id();
 
-    // Get salles via secretaire_salles pivot
-    $salles = Salle::whereHas('secretaires', function ($query) use ($secretaireId) {
-        $query->where('secretaire_id', $secretaireId);
-    })
-    ->with('hopital:id,nom') // Load hopital name
-    ->get(['id', 'nom', 'capacite', 'hopital_id']);
+        // Get salles via secretaire_salles pivot
+        $salles = Salle::whereHas('secretaires', function ($query) use ($secretaireId) {
+            $query->where('secretaire_id', $secretaireId);
+        })
+            ->with('hopital:id,nom') // Load hopital name
+            ->get(['id', 'nom', 'capacite', 'hopital_id']);
 
-    return Inertia::render('secretaire/salle/mesSalles', [
-        'salles' => $salles,
-    ]);
-}
+        return Inertia::render('secretaire/salle/mesSalles', [
+            'salles' => $salles,
+        ]);
+    }
 
     /**
      * Show the form for creating a new resource.

@@ -17,4 +17,3 @@ class Groupe extends Model
         return $this->belongsToMany(User::class, 'groupe_utilisateur', 'groupe_id', 'utilisateur_id');
     }
 }
-

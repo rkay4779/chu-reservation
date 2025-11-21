@@ -71,13 +71,13 @@ export default function CreateSalle() {
               rows={4}
             /> */}
             <textarea
-  id="description"
-  placeholder="Entrez une description (optionnelle)"
-  value={data.description}
-  onChange={(e) => setData('description', e.target.value)}
-  className="mt-1 block w-full rounded-md border shadow-sm focus:ring dark:bg-black dark:text-white dark:border-white dark:focus:ring-white"
-  rows={4}
-/>
+              id="description"
+              placeholder="Entrez une description (optionnelle)"
+              value={data.description}
+              onChange={(e) => setData('description', e.target.value)}
+              className="mt-1 block w-full rounded-md border shadow-sm focus:ring dark:bg-black dark:text-white dark:border-white dark:focus:ring-white"
+              rows={4}
+            />
 
             <InputError message={errors.description} className="mt-2" />
           </div>
@@ -108,12 +108,12 @@ export default function CreateSalle() {
               required
             > */}
             <select
-  id="hopital_id"
-  value={data.hopital_id}
-  onChange={(e) => setData('hopital_id', e.target.value)}
-  className="mt-1 block w-full rounded-md border shadow-sm focus:ring dark:bg-black dark:text-white dark:border-white dark:focus:ring-white"
-  required
->
+              id="hopital_id"
+              value={data.hopital_id}
+              onChange={(e) => setData('hopital_id', e.target.value)}
+              className="mt-1 block w-full rounded-md border shadow-sm focus:ring dark:bg-black dark:text-white dark:border-white dark:focus:ring-white"
+              required
+            >
 
               <option value="">-- Sélectionnez un hôpital --</option>
               {hopitaux.map((hopital) => (

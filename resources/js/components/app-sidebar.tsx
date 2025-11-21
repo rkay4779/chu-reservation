@@ -80,7 +80,7 @@
 // resources/js/components/app-sidebar.tsx
 import { useEffect, useRef, useState } from 'react';
 import { usePage, Link } from '@inertiajs/react';
-import { LayoutGrid, Folder, BookOpen, Users, Home, Calendar, FolderCheck, CalendarIcon,CalendarPlus,CalendarCheck } from 'lucide-react';
+import { LayoutGrid, Folder, BookOpen, Users, Home, Calendar, FolderCheck, CalendarIcon, CalendarPlus, CalendarCheck } from 'lucide-react';
 import AppLogo from './app-logo';
 import ThemeToggle from '@/components/ThemeToggle';
 import { NavUser } from '@/components/nav-user';
@@ -127,22 +127,24 @@ export function AppSidebar() {
       { title: 'Ajouter Hôpital', href: '/admin/hopitaux/create', icon: Home },
       { title: 'Ajouter salle', href: '/admin/salles/create', icon: Folder },
       { title: 'Affectation Salle - Secrétaire', href: '/admin/secretairesalle/affectersecretaire', icon: FolderCheck },
-      { title: 'Gestion Jours Fériés' , icon: CalendarIcon , href: '/admin/joursferies/gestion'},
-      { title: 'Gestion Groupes', href: '/admin/groupes', icon: Users}
-    ],  
+      { title: 'Gestion Jours Fériés', icon: CalendarIcon, href: '/admin/joursferies/gestion' },
+      { title: 'Gestion Groupes', href: '/admin/groupes', icon: Users }
+    ],
     secretaire: [
       { title: 'Dashboard', href: '/secretaire/dashboard', icon: LayoutGrid },
       { title: 'Gestion des demandes', href: '/secretaire/demandes/demandes', icon: Calendar },
       { title: 'Mes salles', href: '/secretaire/mes-salles', icon: Folder },
-      { title: 'Historique des demandes', href: '/secretaire/demandes/historique', icon: BookOpen,
-}
+      {
+        title: 'Historique des demandes', href: '/secretaire/demandes/historique', icon: BookOpen,
+      }
 
     ],
     utilisateur: [
       { title: 'Dashboard', href: '/utilisateur/dashboard', icon: LayoutGrid },
       { title: 'Nouvelle demande', href: '/utilisateur/demande-reservation', icon: CalendarPlus },
-      { title: 'Consultation des disponibilités', href: '/utilisateur/consultation-disponibilite', icon: CalendarCheck,
-},
+      {
+        title: 'Consultation des disponibilités', href: '/utilisateur/consultation-disponibilite', icon: CalendarCheck,
+      },
 
       { title: 'Historique', href: '/utilisateur/historique-demandes', icon: BookOpen },
     ],
@@ -158,7 +160,7 @@ export function AppSidebar() {
       try {
         const ls = localStorage.getItem('sidebar_state');
         if (ls === 'true') return true;
-      } catch (e) {}
+      } catch (e) { }
       return document.documentElement.classList.contains('sidebar-expanded');
     }
     return false;

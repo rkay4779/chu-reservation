@@ -4,7 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     public function up(): void
     {
         // Ensure users exists
@@ -57,9 +58,18 @@ return new class extends Migration {
 
         Schema::table('users', function (Blueprint $table) {
             // drop FKs if exist then columns
-            try { $table->dropForeign(['profil_id']); } catch (\Throwable $e) {}
-            try { $table->dropForeign(['specialite_id']); } catch (\Throwable $e) {}
-            try { $table->dropForeign(['service_id']); } catch (\Throwable $e) {}
+            try {
+                $table->dropForeign(['profil_id']);
+            } catch (\Throwable $e) {
+            }
+            try {
+                $table->dropForeign(['specialite_id']);
+            } catch (\Throwable $e) {
+            }
+            try {
+                $table->dropForeign(['service_id']);
+            } catch (\Throwable $e) {
+            }
 
             if (Schema::hasColumn('users', 'profil_id')) {
                 $table->dropColumn('profil_id');

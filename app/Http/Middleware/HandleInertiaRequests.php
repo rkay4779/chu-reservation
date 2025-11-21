@@ -15,37 +15,15 @@ class HandleInertiaRequests extends Middleware
         return parent::version($request);
     }
 
-    // public function share(Request $request): array
-    // {
-    //     [$message, $author] = str(Inspiring::quotes()->random())->explode('-');
-
-    //     return [
-    //         ...parent::share($request),
-
-    //         'name' => config('app.name'),
-    //         'quote' => ['message' => trim($message), 'author' => trim($author)],
-
-    //         // On expose l'user + profil.libelle à Inertia (pour la sidebar)
-    //         'auth' => [
-    //             'user' => fn () => $request->user()
-    //                 ? $request->user()->loadMissing('profil:id,libelle')->only(['id','name','email','profil'])
-    //                 : null,
-    //         ],
-
-    //         // État initial de la sidebar (si tu l’utilises)
-    //         'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
-    //     ];
-    // }
-        public function share(Request $request): array
+    public function share(Request $request): array
     {
-    return array_merge(parent::share($request), [
-        'auth' => [
-            'user' => fn () => $request->user()
-                ? $request->user()->loadMissing('profil:id,libelle')->only(['id','name','email','profil'])
-                : null,
-        ],
-        'success' => fn () => $request->session()->get('success'),
-    ]);
+        return array_merge(parent::share($request), [
+            'auth' => [
+                'user' => fn () => $request->user()
+                    ? $request->user()->loadMissing('profil:id,libelle')->only(['id', 'name', 'email', 'profil'])
+                    : null,
+            ],
+            'success' => fn () => $request->session()->get('success'),
+        ]);
     }
-
 }

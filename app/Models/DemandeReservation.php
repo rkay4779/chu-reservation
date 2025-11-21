@@ -42,12 +42,10 @@ class DemandeReservation extends Model
         return $this->belongsTo(Salle::class, 'salle_id', 'id');
     }
 
-public function participants()
-{
-    return $this->hasMany(Participant::class, 'demande_id');
-}
-
-
+    public function participants()
+    {
+        return $this->hasMany(Participant::class, 'demande_id');
+    }
 
     /**
      * Les statuts possibles pour la demande.

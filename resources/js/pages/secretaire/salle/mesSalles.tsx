@@ -69,15 +69,7 @@ export default function MesSalles() {
   );
 }
 
-// export default function MesSalles({ salles }: { salles: any[] }) {
-//   console.log('Salles reçues:', salles);
 
-//   return (
-//     <div className="bg-red-500 text-white p-10">
-//       <h1 className="text-2xl">Test direct sans AppLayout</h1>
-//     </div>
-//   );
-// }
 
 
 
